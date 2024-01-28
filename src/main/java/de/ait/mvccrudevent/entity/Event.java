@@ -5,24 +5,35 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String description;
+    private LocalDate date;
 
     public Event() {
     }
 
-    public Event(Long id, String name, String description) {
+    public Event(Long id, String name, String description, LocalDate date) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.date = date;
     }
+
+    public Event(String name, String description, LocalDate date) {
+        this.name = name;
+        this.description = description;
+        this.date = date;
+    }
+
 
     public Long getId() {
         return id;
@@ -48,6 +59,14 @@ public class Event {
         this.description = description;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +86,7 @@ public class Event {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", date=" + date +
                 '}';
     }
 }
