@@ -53,6 +53,39 @@ public class EventController {
         List<Event> res = new ArrayList<>();
         event.ifPresent(res::add);
         model.addAttribute("event", res);
-        return "event-datails";
+        return "event-details";
     }
+
+    @GetMapping("/event/{id}/edit")
+    public String eventEdit(@PathVariable(value = "id") Long id, Model model){
+        if (!eventRepository.existsById(id)){
+            return "redirect:/event";
+        }
+        Optional<Event> event = eventRepository.findById(id);
+        List<Event> res = new ArrayList<>();
+        event.ifPresent(res::add);
+        model.addAttribute("event", res);
+        return "event-edit";
+    }
+    @PostMapping("/event/{id}/edit")
+    public String eventUpdate(@PathVariable(value = "id") Long id,
+                              @RequestParam("name") String name,
+                              @RequestParam("date") String date,
+                              @RequestParam("description") String description,
+                              Model model){
+        Event event = eventRepository.findById(id).orElseThrow();
+        event.setName(name);
+        event.setDate(LocalDate.parse(date));
+        event.setDescription(description);
+        eventRepository.save(event);
+        return "redirect:/event";
+    }
+
+    @PostMapping("/event/{id}/remove")
+    public String eventDelete(@PathVariable(value = "id") Long id){
+        Event event = eventRepository.findById(id).orElseThrow();
+        eventRepository.delete(event);
+        return "redirect:/event";
+    }
+
 }
